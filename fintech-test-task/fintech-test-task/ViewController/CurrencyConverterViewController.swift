@@ -25,6 +25,14 @@ class CurrencyConverterViewController: UIViewController {
         setupDefaultValues()
         startBackgroundUpdate()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setNeedsStatusBarAppearanceUpdate()
+    }
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        .lightContent
+    }
 
     private func setupActions() {
         converterView.fromTextField.addTarget(self, action: #selector(fromAmountChanged), for: .editingChanged)

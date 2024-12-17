@@ -7,8 +7,6 @@
 
 import UIKit
 
-import UIKit
-
 class CurrencyConverterView: UIView {
     
     // MARK: - UI Elements
@@ -17,6 +15,44 @@ class CurrencyConverterView: UIView {
         view.backgroundColor = UIColor.systemBlue
         view.layer.cornerRadius = 20
         return view
+    }()
+    
+    let fromContainer: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor.darkGray.withAlphaComponent(0.25)
+        view.layer.cornerRadius = 15
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOpacity = 0.5
+        view.layer.shadowOffset = CGSize(width: 0, height: 3)
+        view.layer.shadowRadius = 5
+        return view
+    }()
+    
+    let toContainer: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor.darkGray.withAlphaComponent(0.25)
+        view.layer.cornerRadius = 15
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOpacity = 0.5
+        view.layer.shadowOffset = CGSize(width: 0, height: 3)
+        view.layer.shadowRadius = 5
+        return view
+    }()
+    
+    let titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Currency Converter"
+        label.textColor = .white
+        label.font = .systemFont(ofSize: 40, weight: .bold)
+        label.textAlignment = .center
+        label.layer.shadowColor = UIColor.black.cgColor
+        label.layer.shadowRadius = 3.0
+        label.layer.shadowOpacity = 0.3
+        label.layer.shadowOffset = CGSize(width: 3, height: 3)
+        label.layer.masksToBounds = false
+        return label
     }()
     
     let fromTextField: UITextField = {
@@ -36,18 +72,19 @@ class CurrencyConverterView: UIView {
     }()
     
     let fromCurrencyPicker: UIPickerView = {
-            let picker = UIPickerView()
-            picker.backgroundColor = .white
-            picker.layer.masksToBounds = true
-            return picker
+        let picker = UIPickerView()
+        picker.backgroundColor = .white
+        picker.layer.masksToBounds = true
+        return picker
     }()
-
+    
     let fromCurrencyField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "USD"
         textField.textAlignment = .center
         textField.font = .systemFont(ofSize: 42, weight: .bold)
         textField.isUserInteractionEnabled = true
+        textField.keyboardType = .decimalPad
         textField.inputView = UIPickerView()
         textField.inputAccessoryView = CurrencyConverterView.createPickerToolbar()
         textField.textColor = .white
@@ -73,18 +110,19 @@ class CurrencyConverterView: UIView {
     }()
     
     let toCurrencyPicker: UIPickerView = {
-            let picker = UIPickerView()
-            picker.backgroundColor = .white
-            picker.layer.masksToBounds = true
-            return picker
+        let picker = UIPickerView()
+        picker.backgroundColor = .white
+        picker.layer.masksToBounds = true
+        return picker
     }()
-
+    
     let toCurrencyField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "EUR"
         textField.textAlignment = .center
         textField.font = .systemFont(ofSize: 42, weight: .bold)
         textField.isUserInteractionEnabled = true
+        textField.keyboardType = .decimalPad
         textField.inputView = UIPickerView()
         textField.inputAccessoryView = CurrencyConverterView.createPickerToolbar()
         textField.textColor = .white
@@ -121,89 +159,106 @@ class CurrencyConverterView: UIView {
     
     private func setupSubviews() {
         addSubview(backgroundContainer)
-        backgroundContainer.addSubview(fromTextField)
-        backgroundContainer.addSubview(fromCurrencyField)
-        backgroundContainer.addSubview(fromSeparator)
+        backgroundContainer.addSubview(titleLabel)
+        backgroundContainer.addSubview(fromContainer)
+        backgroundContainer.addSubview(toContainer)
+        fromContainer.addSubview(fromTextField)
+        fromContainer.addSubview(fromCurrencyField)
+        fromContainer.addSubview(fromSeparator)
+        toContainer.addSubview(toTextField)
+        toContainer.addSubview(toCurrencyField)
+        toContainer.addSubview(toSeparator)
         backgroundContainer.addSubview(swapButton)
-        backgroundContainer.addSubview(toTextField)
-        backgroundContainer.addSubview(toCurrencyField)
-        backgroundContainer.addSubview(toSeparator)
     }
     private func setupConstraints() {
-            backgroundContainer.translatesAutoresizingMaskIntoConstraints = false
-            fromTextField.translatesAutoresizingMaskIntoConstraints = false
-            fromCurrencyField.translatesAutoresizingMaskIntoConstraints = false
-            fromSeparator.translatesAutoresizingMaskIntoConstraints = false
-            swapButton.translatesAutoresizingMaskIntoConstraints = false
-            toTextField.translatesAutoresizingMaskIntoConstraints = false
-            toCurrencyField.translatesAutoresizingMaskIntoConstraints = false
-            toSeparator.translatesAutoresizingMaskIntoConstraints = false
+        backgroundContainer.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        fromContainer.translatesAutoresizingMaskIntoConstraints = false
+        toContainer.translatesAutoresizingMaskIntoConstraints = false
+        fromTextField.translatesAutoresizingMaskIntoConstraints = false
+        fromCurrencyField.translatesAutoresizingMaskIntoConstraints = false
+        fromSeparator.translatesAutoresizingMaskIntoConstraints = false
+        swapButton.translatesAutoresizingMaskIntoConstraints = false
+        toTextField.translatesAutoresizingMaskIntoConstraints = false
+        toCurrencyField.translatesAutoresizingMaskIntoConstraints = false
+        toSeparator.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            // Background Container
+            backgroundContainer.topAnchor.constraint(equalTo: topAnchor, constant: 0),
+            backgroundContainer.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
+            backgroundContainer.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0),
+            backgroundContainer.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0),
             
-            NSLayoutConstraint.activate([
-                // Background Container
-                backgroundContainer.topAnchor.constraint(equalTo: topAnchor, constant: 0),
-                backgroundContainer.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
-                backgroundContainer.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0),
-                backgroundContainer.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0),
-                
-                // From TextField
-                fromTextField.topAnchor.constraint(equalTo: backgroundContainer.topAnchor, constant: 100),
-                fromTextField.leadingAnchor.constraint(equalTo: backgroundContainer.leadingAnchor, constant: 20),
-                fromTextField.trailingAnchor.constraint(equalTo: backgroundContainer.trailingAnchor, constant: -20),
-                fromTextField.heightAnchor.constraint(equalToConstant: 60),
-                
-                fromSeparator.topAnchor.constraint(equalTo: fromTextField.bottomAnchor, constant: 5),
-                fromSeparator.leadingAnchor.constraint(equalTo: fromTextField.leadingAnchor, constant: 40),
-                fromSeparator.trailingAnchor.constraint(equalTo: fromTextField.trailingAnchor, constant: -40),
-                fromSeparator.heightAnchor.constraint(equalToConstant: 1),
-                
-                fromCurrencyField.topAnchor.constraint(equalTo: fromSeparator.bottomAnchor, constant: 10),
-                fromCurrencyField.leadingAnchor.constraint(equalTo: fromTextField.leadingAnchor),
-                fromCurrencyField.trailingAnchor.constraint(equalTo: fromTextField.trailingAnchor),
-                fromCurrencyField.heightAnchor.constraint(equalToConstant: 44),
-                
-                // Swap Button
-                swapButton.centerXAnchor.constraint(equalTo: backgroundContainer.centerXAnchor),
-                swapButton.topAnchor.constraint(equalTo: fromCurrencyField.bottomAnchor, constant: 20),
-                swapButton.widthAnchor.constraint(equalToConstant: 112),
-                swapButton.heightAnchor.constraint(equalToConstant: 56),
-                
-                // To TextField
-                toTextField.topAnchor.constraint(equalTo: swapButton.bottomAnchor, constant: 20),
-                toTextField.leadingAnchor.constraint(equalTo: fromTextField.leadingAnchor),
-                toTextField.trailingAnchor.constraint(equalTo: fromTextField.trailingAnchor),
-                toTextField.heightAnchor.constraint(equalToConstant: 60),
-                
-                toSeparator.topAnchor.constraint(equalTo: toTextField.bottomAnchor, constant: 5),
-                toSeparator.leadingAnchor.constraint(equalTo: toTextField.leadingAnchor, constant: 40),
-                toSeparator.trailingAnchor.constraint(equalTo: toTextField.trailingAnchor, constant: -40),
-                toSeparator.heightAnchor.constraint(equalToConstant: 1),
-                
-                toCurrencyField.topAnchor.constraint(equalTo: toSeparator.bottomAnchor, constant: 10),
-                toCurrencyField.leadingAnchor.constraint(equalTo: toTextField.leadingAnchor),
-                toCurrencyField.trailingAnchor.constraint(equalTo: toTextField.trailingAnchor),
-                toCurrencyField.heightAnchor.constraint(equalToConstant: 44)
-            ])
-        }
+            //Title Label
+            titleLabel.topAnchor.constraint(equalTo: backgroundContainer.topAnchor, constant: 80),
+            titleLabel.leadingAnchor.constraint(equalTo: backgroundContainer.leadingAnchor, constant: 20),
+            titleLabel.trailingAnchor.constraint(equalTo: backgroundContainer.trailingAnchor, constant: -20),
+            titleLabel.heightAnchor.constraint(equalToConstant: 60),
+            
+            // From Container
+            fromContainer.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
+            fromContainer.leadingAnchor.constraint(equalTo: backgroundContainer.leadingAnchor, constant: 20),
+            fromContainer.trailingAnchor.constraint(equalTo: backgroundContainer.trailingAnchor, constant: -20),
+            
+            
+            fromTextField.topAnchor.constraint(equalTo: fromContainer.topAnchor, constant: 30),
+            fromTextField.leadingAnchor.constraint(equalTo: fromContainer.leadingAnchor, constant: 20),
+            fromTextField.trailingAnchor.constraint(equalTo: fromContainer.trailingAnchor, constant: -20),
+            fromTextField.heightAnchor.constraint(equalToConstant: 60),
+            
+            fromSeparator.topAnchor.constraint(equalTo: fromTextField.bottomAnchor, constant: 5),
+            fromSeparator.leadingAnchor.constraint(equalTo: fromContainer.leadingAnchor, constant: 40),
+            fromSeparator.trailingAnchor.constraint(equalTo: fromContainer.trailingAnchor, constant: -40),
+            fromSeparator.heightAnchor.constraint(equalToConstant: 1),
+            
+            fromCurrencyField.topAnchor.constraint(equalTo: fromSeparator.bottomAnchor, constant: 15),
+            fromCurrencyField.leadingAnchor.constraint(equalTo: fromContainer.leadingAnchor),
+            fromCurrencyField.trailingAnchor.constraint(equalTo: fromContainer.trailingAnchor),
+            fromCurrencyField.bottomAnchor.constraint(equalTo: fromContainer.bottomAnchor, constant: -30),
+            fromCurrencyField.heightAnchor.constraint(equalToConstant: 44),
+            
+            // To Container
+            toContainer.topAnchor.constraint(equalTo: fromContainer.bottomAnchor, constant: 20),
+            toContainer.leadingAnchor.constraint(equalTo: fromContainer.leadingAnchor),
+            toContainer.trailingAnchor.constraint(equalTo: fromContainer.trailingAnchor),
+            
+            toTextField.topAnchor.constraint(equalTo: toContainer.topAnchor, constant: 30),
+            toTextField.leadingAnchor.constraint(equalTo: toContainer.leadingAnchor),
+            toTextField.trailingAnchor.constraint(equalTo: toContainer.trailingAnchor),
+            toTextField.heightAnchor.constraint(equalToConstant: 60),
+            
+            toSeparator.topAnchor.constraint(equalTo: toTextField.bottomAnchor, constant: 5),
+            toSeparator.leadingAnchor.constraint(equalTo: toContainer.leadingAnchor, constant: 40),
+            toSeparator.trailingAnchor.constraint(equalTo: toContainer.trailingAnchor, constant: -40),
+            toSeparator.heightAnchor.constraint(equalToConstant: 1),
+            
+            toCurrencyField.topAnchor.constraint(equalTo: toSeparator.bottomAnchor, constant: 15),
+            toCurrencyField.leadingAnchor.constraint(equalTo: toContainer.leadingAnchor),
+            toCurrencyField.trailingAnchor.constraint(equalTo: toContainer.trailingAnchor),
+            toCurrencyField.bottomAnchor.constraint(equalTo: toContainer.bottomAnchor, constant: -30),
+            toCurrencyField.heightAnchor.constraint(equalToConstant: 44)
+        ])
+    }
     private func configurePickers() {
         fromCurrencyField.inputView = fromCurrencyPicker
         toCurrencyField.inputView = toCurrencyPicker
     }
     
     private static func createPickerToolbar() -> UIToolbar {
-            let toolbar = UIToolbar()
+        let toolbar = UIToolbar()
         toolbar.backgroundColor = .white
-            toolbar.sizeToFit()
-            
-            let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: nil, action: #selector(donePressed))
-            
-            toolbar.setItems([doneButton], animated: false)
-            return toolbar
-        }
-
-        @objc private func donePressed() {
-            endEditing(true)
-        }
+        toolbar.sizeToFit()
+        
+        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: nil, action: #selector(donePressed))
+        
+        toolbar.setItems([doneButton], animated: false)
+        return toolbar
+    }
+    
+    @objc private func donePressed() {
+        endEditing(true)
+    }
 }
 
 
