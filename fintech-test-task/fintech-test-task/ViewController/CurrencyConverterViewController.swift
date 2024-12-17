@@ -20,6 +20,8 @@ class CurrencyConverterViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         setupActions()
         setupListeners()
         setupDefaultValues()
@@ -67,17 +69,25 @@ class CurrencyConverterViewController: UIViewController {
     }
 
     private func fetchConvertedAmount() {
-        //converterView.activityIndicator.startAnimating()
-        model.convert { [weak self] result in
-            DispatchQueue.main.async {
-                //self?.converterView.activityIndicator.stopAnimating()
-                switch result {
-                case .success(let convertedAmount):
-                    self?.converterView.toTextField.text = String(format: "%.2f", convertedAmount)
-                case .failure(let error):
-                    self?.showErrorAlert(error: error)
+        if NetworkMonitor.shared.isConnected {
+            converterView.activityIndicator.startAnimating()
+            converterView.loadingLabel.isHidden = false
+            model.convert { [weak self] result in
+                DispatchQueue.main.async {
+                    self?.converterView.activityIndicator.stopAnimating()
+                    self?.converterView.loadingLabel.isHidden = true
+                    switch result {
+                    case .success(let convertedAmount):
+                        self?.converterView.toTextField.text = String(format: "%.2f", convertedAmount)
+                    case .failure(let error):
+                        self?.showErrorAlert(error: error)
+                    }
                 }
             }
+        }
+        else {
+            let error = NSError(domain: "", code: 10000, userInfo: [ NSLocalizedDescriptionKey: "It appears that you don't have connection to internet. Could you please check your connection and then try again"])
+            showErrorAlert(error: error)
         }
     }
 
@@ -92,9 +102,24 @@ class CurrencyConverterViewController: UIViewController {
             self?.fetchConvertedAmount()
         }
     }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y == 0 && UIScreen.main.bounds.height <= 750 {
+                self.view.frame.origin.y -= keyboardSize.height/2
+            }
+        }
+    }
+
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if self.view.frame.origin.y != 0 {
+            self.view.frame.origin.y = 0
+        }
+    }
 
     deinit {
         timer?.invalidate()
+        NotificationCenter.default.removeObserver(self)
     }
 }
 

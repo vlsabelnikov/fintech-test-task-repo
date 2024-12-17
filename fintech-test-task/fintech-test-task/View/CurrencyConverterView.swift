@@ -13,7 +13,6 @@ class CurrencyConverterView: UIView {
     let backgroundContainer: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.systemBlue
-        view.layer.cornerRadius = 20
         return view
     }()
     
@@ -47,6 +46,7 @@ class CurrencyConverterView: UIView {
         label.textColor = .white
         label.font = .systemFont(ofSize: 40, weight: .bold)
         label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true
         label.layer.shadowColor = UIColor.black.cgColor
         label.layer.shadowRadius = 3.0
         label.layer.shadowOpacity = 0.3
@@ -135,13 +135,22 @@ class CurrencyConverterView: UIView {
         return view
     }()
     
-    let swapButton: UIImageView = {
-        let imageView = UIImageView()
-        let image = UIImage(systemName: "arrow.down")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-        imageView.image = image
-        imageView.contentMode = .scaleAspectFit
-        imageView.layer.masksToBounds = true
-        return imageView
+    let activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = .white
+        indicator.hidesWhenStopped = true
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        return indicator
+    }()
+    
+    let loadingLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Loading..."
+        label.textColor = .white
+        label.font = .systemFont(ofSize: 16, weight: .medium)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     // MARK: - Init
@@ -168,7 +177,8 @@ class CurrencyConverterView: UIView {
         toContainer.addSubview(toTextField)
         toContainer.addSubview(toCurrencyField)
         toContainer.addSubview(toSeparator)
-        backgroundContainer.addSubview(swapButton)
+        backgroundContainer.addSubview(activityIndicator)
+        backgroundContainer.addSubview(loadingLabel)
     }
     private func setupConstraints() {
         backgroundContainer.translatesAutoresizingMaskIntoConstraints = false
@@ -178,7 +188,6 @@ class CurrencyConverterView: UIView {
         fromTextField.translatesAutoresizingMaskIntoConstraints = false
         fromCurrencyField.translatesAutoresizingMaskIntoConstraints = false
         fromSeparator.translatesAutoresizingMaskIntoConstraints = false
-        swapButton.translatesAutoresizingMaskIntoConstraints = false
         toTextField.translatesAutoresizingMaskIntoConstraints = false
         toCurrencyField.translatesAutoresizingMaskIntoConstraints = false
         toSeparator.translatesAutoresizingMaskIntoConstraints = false
@@ -237,7 +246,14 @@ class CurrencyConverterView: UIView {
             toCurrencyField.leadingAnchor.constraint(equalTo: toContainer.leadingAnchor),
             toCurrencyField.trailingAnchor.constraint(equalTo: toContainer.trailingAnchor),
             toCurrencyField.bottomAnchor.constraint(equalTo: toContainer.bottomAnchor, constant: -30),
-            toCurrencyField.heightAnchor.constraint(equalToConstant: 44)
+            toCurrencyField.heightAnchor.constraint(equalToConstant: 44),
+            
+            // Activity Indicator and Loading Label
+            activityIndicator.topAnchor.constraint(equalTo: toContainer.bottomAnchor, constant: 20),
+            activityIndicator.centerXAnchor.constraint(equalTo: backgroundContainer.centerXAnchor),
+                        
+            loadingLabel.topAnchor.constraint(equalTo: activityIndicator.bottomAnchor, constant: 10),
+            loadingLabel.centerXAnchor.constraint(equalTo: activityIndicator.centerXAnchor)
         ])
     }
     private func configurePickers() {
