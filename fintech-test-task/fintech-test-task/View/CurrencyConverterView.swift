@@ -56,7 +56,7 @@ class CurrencyConverterView: UIView {
     }()
     
     let fromTextField: UITextField = {
-        let textField = UITextField()
+        let textField = StaticTextField()
         textField.text = "120.00"
         textField.textColor = .white
         textField.font = .systemFont(ofSize: 48, weight: .bold)
@@ -79,7 +79,7 @@ class CurrencyConverterView: UIView {
     }()
     
     let fromCurrencyField: UITextField = {
-        let textField = UITextField()
+        let textField = StaticTextField()
         textField.placeholder = "USD"
         textField.textAlignment = .center
         textField.font = .systemFont(ofSize: 42, weight: .bold)
@@ -117,7 +117,7 @@ class CurrencyConverterView: UIView {
     }()
     
     let toCurrencyField: UITextField = {
-        let textField = UITextField()
+        let textField = StaticTextField()
         textField.placeholder = "EUR"
         textField.textAlignment = .center
         textField.font = .systemFont(ofSize: 42, weight: .bold)
