@@ -4,4 +4,6 @@ Application developed using a Copilot AI for autocorrection and structuring the 
 
 To Run the app, you should checkout or download the source code project in the newest Xcode version and just execute Run, using your own personal team for simulator, or shared Apple ID with Xcode and iPhone for physical device. Application is tested by myself and one external tester. Please note that application is developed for the newest iOS 18 version but minimal supported as Xcode recommends is iOS 15.
 
+Total time of development: 6h
+
 Have a great day!
